@@ -69,8 +69,17 @@ classdef dualquaternion
             self.S.draw('Origin', T, 'AxisSize', p.Results.AxisSize);
         end
         function display(self)
-            disp(['       ' self.S.strrep()])
-            disp(['\eps*( ' self.D.strrep() ' )'])
+            if length(self) == 1
+                disp(['       ' self.S.strrep()])
+                disp(['\eps*( ' self.D.strrep() ' )'])
+            else
+                disp(['dualquaternion array of length ' num2str(length(self))])
+            end
         end
     end
+%     methods(Static)
+%         function DQ = translation(vect)
+%             DQ = 0
+%         end
+%     end
 end
