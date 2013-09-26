@@ -62,6 +62,12 @@ classdef quaternion
                  Q.Q(3) Q.Q(4) Q.Q(1) -Q.Q(2);
                  Q.Q(4) -Q.Q(3) Q.Q(2) Q.Q(1)];
         end
+        
+        function quat = subs(self, params, values)
+            quat = self;
+            quat.Q = subs(self.Q, params, values);
+        end
+        
         function K = ctranspose(Q)
             % Konjugate of quaternion
             K = Q;

@@ -52,6 +52,12 @@ classdef dualquaternion
                 DQ.D = B.D*A;
             end
         end
+        
+        function DQ = subs(self, params, values)
+            DQ = self;
+            DQ.S = self.S.subs(params, values);
+            DQ.D = self.D.subs(params, values);
+        end
         %% Other functions
         function V = vector8(self)
             V = [self.S.Q; self.D.Q];
@@ -77,9 +83,10 @@ classdef dualquaternion
             end
         end
     end
-%     methods(Static)
-%         function DQ = translation(vect)
-%             DQ = 0
-%         end
-%     end
+    methods(Static)
+        function DQ = translate(vect)
+            % Create the dual quaternion for the translation
+            DQ = dualquaternion(quaternion(), vect);
+        end
+    end
 end
