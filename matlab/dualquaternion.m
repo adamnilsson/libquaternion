@@ -69,10 +69,11 @@ classdef dualquaternion
         function draw(self, varargin)
             p = inputParser;
             p.addOptional('AxisSize', 1)
+            p.addOptional('AxisWeight', 1)
             parse(p, varargin{:})
             
             T = self.translation().vector3();
-            self.S.draw('Origin', T, 'AxisSize', p.Results.AxisSize);
+            self.S.draw('Origin', T, 'AxisSize', p.Results.AxisSize, 'AxisWeight', p.Results.AxisWeight);
         end
         function display(self)
             if length(self) == 1
