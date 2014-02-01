@@ -52,12 +52,6 @@ classdef dualquaternion
                 DQ.D = B.D*A;
             end
         end
-        
-        function DQ = subs(self, params, values)
-            DQ = self;
-            DQ.S = self.S.subs(params, values);
-            DQ.D = self.D.subs(params, values);
-        end
         %% Other functions
         function V = vector8(self)
             V = [self.S.Q; self.D.Q];
@@ -69,25 +63,14 @@ classdef dualquaternion
         function draw(self, varargin)
             p = inputParser;
             p.addOptional('AxisSize', 1)
-            p.addOptional('AxisWeight', 1)
             parse(p, varargin{:})
             
             T = self.translation().vector3();
-            self.S.draw('Origin', T, 'AxisSize', p.Results.AxisSize, 'AxisWeight', p.Results.AxisWeight);
+            self.S.draw('Origin', T, 'AxisSize', p.Results.AxisSize);
         end
         function display(self)
-            if length(self) == 1
-                disp(['       ' self.S.strrep()])
-                disp(['\eps*( ' self.D.strrep() ' )'])
-            else
-                disp(['dualquaternion array of length ' num2str(length(self))])
-            end
-        end
-    end
-    methods(Static)
-        function DQ = translate(vect)
-            % Create the dual quaternion for the translation
-            DQ = dualquaternion(quaternion(), vect);
+            disp(['       ' self.S.strrep()])
+            disp(['\eps*( ' self.D.strrep() ' )'])
         end
     end
 end
