@@ -1,4 +1,13 @@
+% Class: dualquaternion
+% Author: Adam Nilsson
+% Last modified 22-May-2015
+% 
 classdef dualquaternion
+    % dualquaternion is used to represent transformations
+    % The transformations are applied after each other by multiplications.
+    % Such multiplication operator is implemented to the dualquaternion
+    % class and is used by the regular * multiplication sign.
+    % E.g.    A*B yields the product between A and B
     properties
         S
         D
@@ -30,7 +39,7 @@ classdef dualquaternion
                 end
             elseif nargin == 3
                 % Angle, axis, translation
-                self.S = quaternion(q0, q1);
+                self.S = quaternion(cos(q0/2), sin(q0/2)*q1);
                 T = quaternion(q2/2);
                 self.D = T*self.S;
             end
@@ -71,6 +80,19 @@ classdef dualquaternion
         function display(self)
             disp(['       ' self.S.strrep()])
             disp(['\eps*( ' self.D.strrep() ' )'])
+        end
+        function M = getT44(self)
+            % Return the 4x4 transformation atrix for the same quaternion
+            Q = self.S;
+            Ax = Q*quaternion([0,1,0,0])*Q';
+            Ay = Q*quaternion([0,0,1,0])*Q';
+            Az = Q*quaternion([0,0,0,1])*Q';
+            p = self.translation();
+            M = eye(4);
+            M(1:3,1) = Ax.vector3()/norm(Ax.vector3());
+            M(1:3,2) = Ay.vector3()/norm(Ay.vector3());
+            M(1:3,3) = Az.vector3()/norm(Az.vector3());
+            M(1:3,4) = p.vector3();
         end
     end
 end

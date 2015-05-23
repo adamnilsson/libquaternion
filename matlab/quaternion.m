@@ -1,3 +1,7 @@
+% Class: quaternion
+% Author: Adam Nilsson
+% Last modified 22-May-2015
+% 
 classdef quaternion
     properties
         Q
