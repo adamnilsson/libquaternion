@@ -1,6 +1,7 @@
 % Class: quaternion
 % Author: Adam Nilsson
-% Last modified 22-May-2015
+% Last modified 29-Nov-2015
+%   Added subs functionality
 % 
 classdef quaternion
     properties
@@ -169,6 +170,9 @@ classdef quaternion
             if washold == 0
                 hold off;
             end
+        end
+        function Q = subs(self, params, vals)
+            Q = quaternion(subs(self.Q, params, vals));
         end
     end
     methods(Static)

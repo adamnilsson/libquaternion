@@ -1,6 +1,29 @@
 % Class: dualquaternion
 % Author: Adam Nilsson
-% Last modified 22-May-2015
+% Last modified 29-Nov-2015
+%   Added substitute of symbolic variables
+% Modified 10-Oct-2015
+%   Added addition operator
+% 
+% dualquaternion()
+% 
+% dualquaternion(q)
+%     q = q0 + q1*i + q2*j + q3*k + \eps*(q4 + q5*i + q6*j + q7*k)
+% 
+% dualquaternion(q0, q1)
+%     q = q0 + \eps*q1, q0, q1 \in quaternion
+% 
+% dualquaternion(q0, q1)
+%     q = q0 + \eps*(q1_0 + q1_1*i + q1_2*j + q1_3*k)
+% 
+% dualquaternion(q0, q1)
+%     q0 is rotation quaternion
+%     q1 is componets of dual part
+% 
+% dualquaternion(q0, q1, q2)
+%     q0 is scalar angle
+%     q1 is unit axis of rotation
+%     q2 is translation vector
 % 
 classdef dualquaternion
     % dualquaternion is used to represent transformations
@@ -61,6 +84,17 @@ classdef dualquaternion
                 DQ.D = B.D*A;
             end
         end
+        function DQ = plus(A, B)
+            % Sum of dual quaternions
+            DQ = dualquaternion();
+            DQ.S = A.S + B.S;
+            DQ.D = A.D + B.D;
+        end
+        function K = ctranspose(Q)
+            % Konjugate of quaternion
+            % Added 8-Aug-2015 --Adam
+            K = dualquaternion(Q.S', Q.D')
+        end
         %% Other functions
         function V = vector8(self)
             V = [self.S.Q; self.D.Q];
@@ -93,6 +127,11 @@ classdef dualquaternion
             M(1:3,2) = Ay.vector3()/norm(Ay.vector3());
             M(1:3,3) = Az.vector3()/norm(Az.vector3());
             M(1:3,4) = p.vector3();
+        end
+        function Q = subs(self, params, values)
+            Q = dualquaternion();
+            Q.S = self.S.subs(params, values);
+            Q.D = self.D.subs(params, values);
         end
     end
 end
